@@ -1,4 +1,4 @@
-import 'package:teste/pages/login.dart';
+import 'package:mobirural/pages/login.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const Home());

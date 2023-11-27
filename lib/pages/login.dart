@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                   width: 100,
                   height: 108,
-                  child: Image.asset('logo.png'),
+                  child: Image.asset('assets/logo.png'),
                 ),  
               const Text(
                 'MobiRural',
