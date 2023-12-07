@@ -6,7 +6,7 @@ void main() => runApp(const MaterialApp(
     ));
 
 class InicialScreen extends StatelessWidget {
-  const InicialScreen({Key? key}) : super(key: key);
+  const InicialScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
