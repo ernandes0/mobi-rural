@@ -13,7 +13,7 @@ import 'package:flutter/foundation.dart'
 /// await Firebase.initializeApp(
 ///   options: DefaultFirebaseOptions.currentPlatform,
 /// );
-/// ```
+
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
@@ -51,17 +51,17 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyD-gyB4iIsDjnGWQIN6M_LTywLOWrc6LoM',
-    appId: '1:157492969379:web:7878c08fc7cb746a6aa416',
+    appId: '1:157492969379:web:e7eddc04248e5a946aa416',
     messagingSenderId: '157492969379',
     projectId: 'mobirural',
     authDomain: 'mobirural.firebaseapp.com',
     storageBucket: 'mobirural.appspot.com',
-    measurementId: 'G-1BRF4QRMX1',
+    measurementId: 'G-VBCYZVM1H5',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBtsCVLtiWkGBZVyJhnt0eOxLjXhLNk0k4',
-    appId: '1:157492969379:android:f73f671753d65f606aa416',
+    appId: '1:157492969379:android:9d0f9e4892a9b0736aa416',
     messagingSenderId: '157492969379',
     projectId: 'mobirural',
     storageBucket: 'mobirural.appspot.com',

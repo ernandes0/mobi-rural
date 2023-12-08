@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobirural/models/user_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 void main() => runApp(
       const MaterialApp(
@@ -7,12 +9,24 @@ void main() => runApp(
       ),
     );
 
-class CadastroScreen extends StatelessWidget {
+class CadastroScreen extends StatefulWidget {
   const CadastroScreen({super.key});
 
   @override
+  
+  // ignore: library_private_types_in_public_api
+  _CadastroScreenState createState() => _CadastroScreenState();
+}
+
+class _CadastroScreenState extends State<CadastroScreen> {
+  final _namecontroller = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+
     final passwordController = TextEditingController();
     bool isPasswordValid = true;
     bool isPasswordConfirmed = true;
@@ -31,9 +45,15 @@ class CadastroScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
+        child: SingleChildScrollView(child:
+            ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+          if (model.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Form(
+            key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -51,6 +71,7 @@ class CadastroScreen extends StatelessWidget {
                   ),
                 ),
                 TextFormField(
+                  controller: _namecontroller,
                   decoration: const InputDecoration(
                     labelText: 'Nome',
                     labelStyle: TextStyle(color: Colors.grey),
@@ -68,6 +89,7 @@ class CadastroScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.grey),
@@ -96,8 +118,7 @@ class CadastroScreen extends StatelessWidget {
                   ),
                   onChanged: (value) {
                     if (value.length >= 8 &&
-                        RegExp(
-                                r'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+]).{8,}')
+                        RegExp(r'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+]).{8,}')
                             .hasMatch(value)) {
                       isPasswordValid = true;
                     } else {
@@ -115,6 +136,7 @@ class CadastroScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _passController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Confirmar Senha',
@@ -144,7 +166,17 @@ class CadastroScreen extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      if (formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) {
+                        Map<String, dynamic> userData = {
+                          "name": _namecontroller.text,
+                          "email": _emailController.text,
+                        };
+
+                        model.signUp(
+                            userData: userData,
+                            pass: _passController.text,
+                            onSuccess: _onSuccess,
+                            onFail: _onFail);
                         // Implementar ação para "Criar Conta"
                       }
                     },
@@ -171,9 +203,13 @@ class CadastroScreen extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ),
+          );
+        })),
       ),
     );
   }
+
+  void _onSuccess() {}
+
+  void _onFail() {}
 }

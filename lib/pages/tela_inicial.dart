@@ -7,7 +7,7 @@ void main() => runApp(const MaterialApp(
     ));
 
 class InicialScreen extends StatefulWidget {
-  const InicialScreen({Key? key}) : super(key: key);
+  const InicialScreen({super.key});
 
   @override
   State<InicialScreen> createState() => _InicialScreenState();
