@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobirural/models/user_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 void main() => runApp(const MaterialApp(
       home: InicialScreen(),
@@ -31,7 +33,7 @@ class _InicialScreenState extends State<InicialScreen> {
       height: 40,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: const Color(0xff24c153))),
+          border: Border.all(color:  const Color.fromARGB(255, 0, 200, 83))),
       child: Stack(
         children: [
           const Padding(
@@ -60,26 +62,29 @@ class _InicialScreenState extends State<InicialScreen> {
       ),
     );
 
-    Widget boasvindas = const Center(
+    Widget boasvindas = ScopedModelDescendant<UserModel>(
+      builder: (context, child, model) {
+        return  Center(
       child: SizedBox(
         height: 100,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Olá, João!',
-              style: TextStyle(fontSize: 22),
+              'Olá, ${!model.isLoggedIn() ? "" : model.userData["name"]}',
+              style: const TextStyle(fontSize: 22),
             ),
-            SizedBox(height: 12),
-            Text(
+            const SizedBox(height: 12),
+            const Text(
               'Estes são os prédios disponíveis:',
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
           ],
         ),
       ),
     );
+      });
 
     Widget colunadupla = SizedBox(
       height: MediaQuery.of(context).size.height - 268,
