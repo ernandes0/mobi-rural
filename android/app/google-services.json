@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157492969379",
+    "project_id": "mobirural",
+    "storage_bucket": "mobirural.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157492969379:android:9d0f9e4892a9b0736aa416",
+        "android_client_info": {
+          "package_name": "com.example.mobirural"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtsCVLtiWkGBZVyJhnt0eOxLjXhLNk0k4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
