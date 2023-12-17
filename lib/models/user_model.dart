@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class UserModel extends Model {
+class UserModel extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late User? firebaseUser;
+  User? firebaseUser;
 
   Map<String, dynamic> userData = {};
   bool isLoading = false;
@@ -17,6 +17,18 @@ class UserModel extends Model {
     super.addListener(listener);
 
     _loadCurrentUser();
+  }
+
+  UserModel() {
+    _authCheck();
+  }
+
+  _authCheck() async {
+    _auth.authStateChanges().listen((User? newUser) {
+      firebaseUser = newUser;
+      isLoading = false;
+      notifyListeners();
+    });
   }
   
 //cadastrar usuário
@@ -76,20 +88,15 @@ class UserModel extends Model {
     });
   }
 
-  void recoverPassword() {
-    // recuperar senha
-  }
-
   bool isLoggedIn() {
-    return firebaseUser != null; // Verifica se firebaseUser é diferente de null
+    return firebaseUser != null;
   }
 
-  void signOut() async {
+  Future<void> signOut() async {
     await _auth.signOut();
-
-    userData = {};
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userId');
     firebaseUser = null;
-
     notifyListeners();
   }
 
@@ -100,6 +107,7 @@ class UserModel extends Model {
         .doc(firebaseUser!.uid)
         .set(userData);
   }
+
 
   Future<Null> _loadCurrentUser() async {
     firebaseUser ??= _auth.currentUser;
@@ -113,5 +121,14 @@ class UserModel extends Model {
       }
     }
     notifyListeners();
+  }
+
+  //recuperar senha
+  Future<void> recoverPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw e.toString();
+    }
   }
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/user_model.dart';
+import 'package:mobirural/pages/cadastro.dart';
 import 'package:mobirural/pages/tela_inicial.dart';
-import 'package:scoped_model/scoped_model.dart';
-import 'cadastro.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -19,163 +20,169 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(20.0),
-            child: ScopedModelDescendant<UserModel>(
-              builder: (context, child, model) {
-                if (model.isLoading) {
-                  return const CircularProgressIndicator(
-                    color: Colors.greenAccent,
-                  );
-                }
-                return Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const SizedBox(height: 20.0),
-                      SizedBox(
-                        width: 100,
-                        height: 108,
-                        child: Image.asset('assets/logo.png'),
-                      ),
-                      const Text(
-                        'MobiRural',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
+            child: userModel.isLoading
+                ? const CircularProgressIndicator(
+                    color: AppColors.accentColor,
+                  )
+                : Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 100,
+                          height: 108,
+                          child: Image.asset('assets/logo.png'),
                         ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      const Text(
-                        'Faça login na sua conta',
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 16.0,
-                        ),
-                      ),
-                      const SizedBox(height: 40.0),
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.greenAccent.shade700),
+                        const Text(
+                          'MobiRural',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        validator: (value) {
-                          if (value == null || !value.contains('@')) {
-                            return 'Digite um email válido';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10.0),
-                      TextFormField(
-                        controller: _passController,
-                        decoration: InputDecoration(
-                          labelText: 'Senha',
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.greenAccent.shade700),
+                        const SizedBox(height: 20.0),
+                        const Text(
+                          'Faça login na sua conta',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 16.0,
                           ),
                         ),
-                        obscureText: true,
-                        validator: (value) {
-                          if (value == null ||
-                              value.isEmpty ||
-                              value.length < 6) {
-                            return 'A senha deve ter no mínimo 6 caracteres';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              // Implementar ação para "Esqueci a senha"
-                            },
-                            child: Text(
-                              'Esqueci a senha',
-                              style: TextStyle(color: Colors.greenAccent[700]),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              model.signIn(
-                                email: _emailController.text,
-                                pass: _passController.text,
-                                onSuccess: _onSuccess,
-                                onFail: _onFail,
-                              );
-                            }
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Colors.greenAccent[700]),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
+                        const SizedBox(height: 40.0),
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.primaryColor,
                               ),
                             ),
-                            padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
-                              const EdgeInsets.symmetric(vertical: 10.0),
+                          ),
+                          validator: (value) {
+                            if (value == null || !value.contains('@')) {
+                              return 'Digite um email válido';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10.0),
+                        TextFormField(
+                          controller: _passController,
+                          decoration: const InputDecoration(
+                            labelText: 'Senha',
+                            labelStyle: TextStyle(color: Colors.grey),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: AppColors.primaryColor,
+                              ),
                             ),
                           ),
-                          child: const Text(
-                            'Entrar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.length < 6) {
+                              return 'A senha deve ter no mínimo 6 caracteres';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 10.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                // Implementar ação para "Esqueci a senha"
+                              },
+                              child: const Text(
+                                'Esqueci a senha',
+                                style:
+                                    TextStyle(color: AppColors.primaryColor),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 40.0),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                userModel.signIn(
+                                  email: _emailController.text,
+                                  pass: _passController.text,
+                                  onSuccess: _onSuccess,
+                                  onFail: _onFail,
+                                );
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                AppColors.primaryColor,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
+                              padding:
+                                  MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                const EdgeInsets.symmetric(vertical: 10.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Entrar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                            'Ainda não é usuário? ',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CadastroScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Crie um cadastro',
-                              style: TextStyle(color: Colors.greenAccent[700]),
+                        const SizedBox(height: 20.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Text(
+                              'Ainda não é usuário? ',
+                              style: TextStyle(color: Colors.black),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CadastroScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Crie um cadastro',
+                                style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                );
-              })),
+          ),
         ),
       ),
     );
