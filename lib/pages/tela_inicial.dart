@@ -34,7 +34,7 @@ class _InicialScreenState extends State<InicialScreen> {
       ),
       child: Stack(
         children: [
-          const Padding(
+          const Padding(  
             padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
             child: TextField(
               decoration: InputDecoration(

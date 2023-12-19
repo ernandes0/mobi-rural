@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/user_model.dart';
+import 'package:mobirural/pages/configuracoes.dart';
 import 'package:provider/provider.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -11,7 +12,6 @@ class PerfilScreen extends StatefulWidget {
 }
 
 class _PerfilScreenState extends State<PerfilScreen> {
-  
   @override
   Widget build(BuildContext context) {
     Widget perfil = const SizedBox(
@@ -31,7 +31,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
       ),
     );
 
-    Widget meuPerfil =  Stack(
+    Widget meuPerfil = Stack(
       alignment: Alignment.topCenter,
       children: [
         const Positioned(
@@ -60,7 +60,6 @@ class _PerfilScreenState extends State<PerfilScreen> {
             ),
           ),
         ),
-
         Container(
           margin: const EdgeInsets.all(16.0),
           padding: const EdgeInsets.all(16.0),
@@ -99,6 +98,30 @@ class _PerfilScreenState extends State<PerfilScreen> {
           ),
         ),
       ],
+    );
+
+    Widget configuracoes = Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+            side: const BorderSide(color: Colors.transparent),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ConfiguracoesPage()));
+        },
+        child: const Text(
+          "Configurações",
+          style: TextStyle(fontSize: 16.0),
+        ),
+      ),
     );
 
     Widget exitButton = Padding(
@@ -142,6 +165,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
           children: [
             perfil,
             meuPerfil,
+            configuracoes,
             exitButton,
           ],
         ));
