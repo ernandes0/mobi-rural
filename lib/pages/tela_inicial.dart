@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobirural/constants/appconstants.dart';
+import 'package:mobirural/models/building_model.dart';
 import 'package:mobirural/models/user_model.dart';
+import 'package:mobirural/services/building_service.dart';
+import 'package:mobirural/widgets/buildingcard.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -12,7 +15,6 @@ class InicialScreen extends StatefulWidget {
 }
 
 class _InicialScreenState extends State<InicialScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -34,7 +36,7 @@ class _InicialScreenState extends State<InicialScreen> {
       ),
       child: Stack(
         children: [
-          const Padding(  
+          const Padding(
             padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0),
             child: TextField(
               decoration: InputDecoration(
@@ -85,26 +87,47 @@ class _InicialScreenState extends State<InicialScreen> {
       },
     );
 
-    Widget colunadupla = SizedBox(
-      height: MediaQuery.of(context).size.height - 268,
-      child: GridView.builder(
-        itemCount: 20,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1,
-          crossAxisSpacing: 2,
-          mainAxisSpacing: 1,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            semanticContainer: true,
-            margin: const EdgeInsets.all(15),
-            child: Center(
-              child: Text('Item $index'),
+    final buildingService =
+        Provider.of<BuildingService>(context, listen: false);
+
+    Widget colunadupla = FutureBuilder<List<Building>>(
+      future: buildingService.getBuildings(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.primaryColor,
             ),
           );
-        },
-      ),
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text('Erro ao carregar os dados dos prédios'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text('Nenhum prédio encontrado'),
+          );
+        } else {
+          //snapshot.data contém a lista de prédios recuperados
+          List<Building> buildings = snapshot.data!;
+
+          return SizedBox(
+            height: MediaQuery.of(context).size.height - 268,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1.25,
+                crossAxisSpacing: 4.0,
+                mainAxisSpacing: 4.0,
+              ),
+              itemCount: buildings.length,
+              itemBuilder: (context, index) {
+                return BuildingCard(building: buildings[index]);
+              },
+            ),
+          );
+        }
+      },
     );
 
     return Scaffold(

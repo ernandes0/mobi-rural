@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/user_model.dart';
-import 'package:mobirural/pages/tela_inicial.dart';
+import 'package:mobirural/widgets/navbar.dart';
 import 'package:provider/provider.dart';
 
 class CadastroScreen extends StatefulWidget {
@@ -233,7 +233,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const InicialScreen(),
+          builder: (context) => const HomeNavBar(),
         ),
       );
     });

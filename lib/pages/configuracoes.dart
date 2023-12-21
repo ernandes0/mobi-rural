@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobirural/pages/teste.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
   
@@ -22,6 +23,7 @@ class ConfiguracoesPage extends StatelessWidget {
             TextButton(
               child: const Text('Reportar Problema'),
               onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const TestePage()));
               }),
             TextButton(
               child: const Text('Logout'),

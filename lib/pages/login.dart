@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/pages/cadastro.dart';
-import 'package:mobirural/pages/tela_inicial.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -126,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onSuccess: _onSuccess,
                                   onFail: _onFail,
                                 );
+                                setState(() => userModel.isLoading = false);
                               }
                             },
                             style: ButtonStyle(
@@ -189,12 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _onSuccess() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const InicialScreen(),
-      ),
-    );
+
   }
 
   void _onFail() {
@@ -202,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
       const SnackBar(
         content: Text('Falha ao entrar'),
         backgroundColor: Color.fromARGB(255, 222, 22, 22),
-        duration: Duration(seconds: 1),
+        duration: Duration(seconds: 2),
       ),
     );
   }
