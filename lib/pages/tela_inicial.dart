@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobirural/constants/appconstants.dart';
+import 'package:mobirural/models/building_model.dart';
 import 'package:mobirural/models/user_model.dart';
-import 'package:scoped_model/scoped_model.dart';
-
-void main() => runApp(const MaterialApp(
-      home: InicialScreen(),
-      debugShowCheckedModeBanner: false,
-    ));
+import 'package:mobirural/services/building_service.dart';
+import 'package:mobirural/widgets/buildingcard.dart';
+import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
   const InicialScreen({super.key});
@@ -32,8 +31,9 @@ class _InicialScreenState extends State<InicialScreen> {
       width: 278,
       height: 40,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(color:  const Color.fromARGB(255, 0, 200, 83))),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.primaryColor),
+      ),
       child: Stack(
         children: [
           const Padding(
@@ -53,7 +53,7 @@ class _InicialScreenState extends State<InicialScreen> {
               width: 28,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: const Color(0xff24c153),
+                color: AppColors.primaryColor,
               ),
               child: const Icon(Icons.mic, size: 20, color: Colors.white),
             ),
@@ -62,64 +62,76 @@ class _InicialScreenState extends State<InicialScreen> {
       ),
     );
 
-    Widget boasvindas = ScopedModelDescendant<UserModel>(
-      builder: (context, child, model) {
-        return  Center(
-      child: SizedBox(
-        height: 100,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Olá, ${!model.isLoggedIn() ? "" : model.userData["name"]}',
-              style: const TextStyle(fontSize: 22),
+    Widget boasvindas = Consumer<UserModel>(
+      builder: (context, userModel, child) {
+        return Center(
+          child: SizedBox(
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Olá, ${!userModel.isLoggedIn() ? "" : userModel.userData["name"]}',
+                  style: const TextStyle(fontSize: 22),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Estes são os prédios disponíveis:',
+                  style: TextStyle(fontSize: 18),
+                ),
+                const SizedBox(height: 30),
+              ],
             ),
-            const SizedBox(height: 12),
-            const Text(
-              'Estes são os prédios disponíveis:',
-              style: TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
-      });
 
-    Widget colunadupla = SizedBox(
-      height: MediaQuery.of(context).size.height - 268,
-      child: GridView.builder(
-        itemCount: 20,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1 / 1,
-          crossAxisSpacing: 2,
-          mainAxisSpacing: 1,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            semanticContainer: true,
-            margin: const EdgeInsets.all(15),
-            child: Center(
-              child: Text('Item $index'),
+    final buildingService =
+        Provider.of<BuildingService>(context, listen: false);
+
+    Widget colunadupla = FutureBuilder<List<Building>>(
+      future: buildingService.getBuildings(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColors.primaryColor,
             ),
           );
-        },
-      ),
-    );
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text('Erro ao carregar os dados dos prédios'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(
+            child: Text('Nenhum prédio encontrado'),
+          );
+        } else {
+          //snapshot.data contém a lista de prédios recuperados
+          List<Building> buildings = snapshot.data!;
 
-    Widget botaoCamera = FloatingActionButton(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-      ),
-      onPressed: () {},
-      elevation: 5,
-      backgroundColor: Colors.green,
-      child: Image.asset('assets/cam_icon.png'),
-      // TODO: Ajustar posição do botão com teclado
+          return SizedBox(
+            height: MediaQuery.of(context).size.height - 268,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 1 / 1.25,
+                crossAxisSpacing: 4.0,
+                mainAxisSpacing: 4.0,
+              ),
+              itemCount: buildings.length,
+              itemBuilder: (context, index) {
+                return BuildingCard(building: buildings[index]);
+              },
+            ),
+          );
+        }
+      },
     );
 
     return Scaffold(
+      backgroundColor: AppColors.backgroundColor,
       body: ListView(
         children: [
           barradebusca,
@@ -127,39 +139,6 @@ class _InicialScreenState extends State<InicialScreen> {
           colunadupla,
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Colors.black,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-            backgroundColor: Colors.red,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(null), // Ícone invisível para espaçamento
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.navigation),
-            label: 'Navegador',
-            backgroundColor: Colors.green,
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
-            label: 'Salvos',
-            backgroundColor: Colors.purple,
-          ),
-        ],
-      ),
-      floatingActionButton: botaoCamera,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
