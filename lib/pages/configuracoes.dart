@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
-import 'package:mobirural/pages/teste.dart';
-import 'package:flutter/material.dart';
-import 'package:mobirural/constants/appconstants.dart';
-import 'package:mobirural/models/user_model.dart';
-import 'package:mobirural/pages/configuracoes.dart';
-import 'package:provider/provider.dart';
+
 class ConfiguracoesPage extends StatelessWidget {
   
 

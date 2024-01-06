@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/building_model.dart';
+import 'package:mobirural/services/distance_calculator.dart';
 
 class BuildingDetailsScreen extends StatelessWidget {
   final Building building;
@@ -42,12 +43,12 @@ class BuildingDetailsScreen extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          height: 200, 
+          height: 200,
           child: Stack(
             alignment: Alignment.center,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(40.0),
                 child: Image.network(
                   building.image ?? '',
                   fit: BoxFit.cover,
@@ -69,11 +70,64 @@ class BuildingDetailsScreen extends StatelessWidget {
       ],
     );
 
+    Widget predio = Text(
+      building.name ?? '',
+      style: const TextStyle(
+        fontSize: 24.0,
+        fontWeight: FontWeight.bold,
+      ),
+      textAlign: TextAlign.center,
+    );
+
+    Widget distancia = FutureBuilder<double?>(
+      future: calculateDistanceToBuilding(building),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Text(
+            'Calculando distância...',
+            style: TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor),
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasError) {
+          return Text(
+            'Erro ao calcular distância: ${snapshot.error}',
+            style: const TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor),
+            textAlign: TextAlign.center,
+          );
+        } else if (snapshot.hasData) {
+          double? distance = snapshot.data;
+          return Text(
+            '${distance?.toStringAsFixed(2)} Km', // Exibindo a distância com duas casas decimais
+            style: const TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor),
+            textAlign: TextAlign.center,
+          );
+        } else {
+          return const Text('Distância indisponível',
+              style: TextStyle(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColor),
+              textAlign: TextAlign.center);
+        }
+      },
+    );
+
     return Scaffold(
       body: ListView(
         children: [
           appbar,
           imagem,
+          predio,
+          distancia,
         ],
       ),
     );
