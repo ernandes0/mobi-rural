@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/building_model.dart';
+import 'package:mobirural/services/accessibility_info.dart';
 import 'package:mobirural/services/distance_calculator.dart';
 
 class BuildingDetailsScreen extends StatelessWidget {
@@ -95,9 +96,9 @@ class BuildingDetailsScreen extends StatelessWidget {
           return Text(
             'Erro ao calcular distância: ${snapshot.error}',
             style: const TextStyle(
-                fontSize: 22.0,
+                fontSize: 16.0,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primaryColor),
+                color: AppColors.textColor),
             textAlign: TextAlign.center,
           );
         } else if (snapshot.hasData) {
@@ -121,13 +122,57 @@ class BuildingDetailsScreen extends StatelessWidget {
       },
     );
 
+    Widget infos = Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: AccessibilityInfoWidget(
+          specialParking: building.parking,
+          accessRamps: building.accessRamps,
+          elevator: building.elevator,
+          adaptedBathroom: building.adaptedBathroom,
+          tactilePaving: building.floor,
+        ));
+
+    Widget guiar = Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: () {},
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              AppColors.primaryColor,
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(vertical: 10.0),
+            ),
+          ),
+          child: const Text(
+            'Guie-me até o prédio',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ),
+    );
+
     return Scaffold(
       body: ListView(
         children: [
           appbar,
           imagem,
+          const SizedBox(height: 5.0),
           predio,
           distancia,
+          infos,
+          guiar,
         ],
       ),
     );
