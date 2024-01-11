@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Building {
+  String? id;
   final String? accessRamps;
   final String? adaptedBathroom;
   final GeoPoint? coordinates;
@@ -12,6 +13,7 @@ class Building {
   final String? image;
 
   Building({
+    this.id,
     this.accessRamps,
     this.adaptedBathroom,
     this.coordinates,

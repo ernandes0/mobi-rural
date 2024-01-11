@@ -11,7 +11,6 @@ class UserModel extends ChangeNotifier {
   Map<String, dynamic> userData = {};
   bool isLoading = false;
 
-
   @override
   void addListener(VoidCallback listener) {
     super.addListener(listener);
@@ -30,7 +29,7 @@ class UserModel extends ChangeNotifier {
       notifyListeners();
     });
   }
-  
+
 //cadastrar usuário
   void signUp({
     required Map<String, dynamic> userData,
@@ -73,7 +72,9 @@ class UserModel extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    _auth.signInWithEmailAndPassword(email: email, password: pass).then((user) async {
+    _auth
+        .signInWithEmailAndPassword(email: email, password: pass)
+        .then((user) async {
       firebaseUser = user.user!;
 
       await _loadCurrentUser();
@@ -108,7 +109,6 @@ class UserModel extends ChangeNotifier {
         .set(userData);
   }
 
-
   Future<Null> _loadCurrentUser() async {
     firebaseUser ??= _auth.currentUser;
     if (firebaseUser != null) {
@@ -123,12 +123,15 @@ class UserModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  //recuperar senha
   Future<void> recoverPassword(String email) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
       throw e.toString();
     }
+  }
+
+  String? getId() {
+    return firebaseUser?.uid;
   }
 }
