@@ -5,6 +5,7 @@ import 'package:mobirural/models/building_model.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/services/building_service.dart';
 import 'package:mobirural/widgets/buildingcard.dart';
+import 'package:mobirural/pages/cadastro_predio.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -138,13 +139,41 @@ class _InicialScreenState extends State<InicialScreen> {
           }
         });
 
+    // Widget botão flutuante
+    Widget botaoFlutuante = Positioned(
+      bottom: 100,
+      right: 100,
+      child: FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateBuilding(),
+            ),
+          );
+        },
+        backgroundColor: AppColors.primaryColor,
+        child: const Icon(Icons.add),
+      ),
+    );
+
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: ListView(
+      body: Stack(
         children: [
-          barradebusca,
-          boasvindas,
-          colunadupla,
+          ListView(
+            children: [
+              barradebusca,
+              boasvindas,
+              colunadupla,
+            ],
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height / 10,
+            left: MediaQuery.of(context).size.width / 1.2,
+            child: botaoFlutuante,
+          ),
         ],
       ),
     );
