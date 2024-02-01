@@ -63,6 +63,22 @@ class UserModel extends ChangeNotifier {
     });
   }
 
+  // atualizar usuário
+  void updateProfile({
+    required Map<String, dynamic> userData,
+    required VoidCallback onSuccess,
+    required VoidCallback onFail,
+  }) async {
+    isLoading = true;
+    notifyListeners();
+
+    await _saveUserData(userData);
+
+    onSuccess();
+    isLoading = false;
+    notifyListeners();
+  }
+
 // logar usuário
   void signIn(
       {required String email,
