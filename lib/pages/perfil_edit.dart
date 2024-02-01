@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:provider/provider.dart';
-import 'package:mobirural/widgets/forms.dart';
 import 'package:mobirural/widgets/appbar_edit.dart';
 import 'package:mobirural/widgets/navbar.dart';
 
@@ -15,15 +14,8 @@ class EditPerfil extends StatefulWidget {
 
 class _EditPerfilState extends State<EditPerfil> {
   final Widget _appbaredit = const AppBarEdit(titleName: 'Editar');
-  late String _nameController;
-  late String _emailController;
-  editFormName(context, userModel) {
-    _nameController = '${userModel.userData["name"]}';
-    return Forms(
-      inputLabelName: 'Nome',
-      inputText: _nameController,
-    );
-  }
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -42,24 +34,28 @@ class _EditPerfilState extends State<EditPerfil> {
       );
     }
 
-    Widget editFormName(BuildContext context, UserModel userModel) {
-      _nameController = '${userModel.userData["name"]}';
-      return Forms(
-        inputLabelName: 'Nome',
-        inputText: _nameController,
-      );
-    }
+    // Widget editFormName(BuildContext context, UserModel userModel) {
+    //   _nameController = '${userModel.userData["name"]}';
+    //   return Forms(
+    //     inputLabelName: 'Nome',
+    //     inputText: _nameController,
+    //   );
+    // }
 
-    Widget editFormEmail(BuildContext context, UserModel userModel) {
-      _emailController = '${userModel.userData["email"]}';
-      return Forms(
-        inputLabelName: 'Email',
-        inputText: _emailController,
-      );
-    }
+    // Widget editFormEmail(BuildContext context, UserModel userModel) {
+    //   _emailController = '${userModel.userData["email"]}';
+    //   return Forms(
+    //     inputLabelName: 'Email',
+    //     inputText: _emailController,
+    //   );
+    // }
 
     Widget formBox = Consumer<UserModel>(
       builder: (context, userModel, child) {
+        _nameController =
+            TextEditingController(text: userModel.userData["name"]);
+        _emailController =
+            TextEditingController(text: userModel.userData["email"]);
         return Center(
           child: Form(
             key: _formKey,
@@ -72,8 +68,42 @@ class _EditPerfilState extends State<EditPerfil> {
                     'Edite suas informações',
                     style: TextStyle(fontSize: 22),
                   ),
-                  editFormName(context, userModel),
-                  editFormEmail(context, userModel),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.grey),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Campo obrigatório';
+                      }
+                      return null;
+                    },
+                  ),
                 ],
               ),
             ),
@@ -88,9 +118,8 @@ class _EditPerfilState extends State<EditPerfil> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             Map<String, dynamic> userData = {
-              //TODO: Corrigir os campos modificados
-              "name": _nameController,
-              "email": _emailController,
+              "name": _nameController.text,
+              "email": _emailController.text,
             };
 
             userModel.updateProfile(
