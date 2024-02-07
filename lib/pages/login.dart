@@ -46,7 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           width: 100,
                           height: 108,
-                          child: Image.asset('assets/logo.png'),
+                          child: Image.asset(
+                            'assets/logo.png',
+                            semanticLabel: 'Logo MobiRural',
+                          ),
                         ),
                         const Text(
                           'MobiRural',
@@ -68,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
+                            hintText: 'Email',
                             labelText: 'Email',
                             labelStyle: TextStyle(color: Colors.grey),
                             focusedBorder: UnderlineInputBorder(
@@ -87,6 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _passController,
                           decoration: InputDecoration(
+                              hintText: 'Senha',
                               labelText: 'Senha',
                               labelStyle: const TextStyle(color: Colors.grey),
                               focusedBorder: const UnderlineInputBorder(
@@ -163,6 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: const Text(
                               'Entrar',
+                              semanticsLabel: 'Entrar no Aplicativo',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -190,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               child: const Text(
                                 'Crie um cadastro',
+                                semanticsLabel: 'Crie um cadastro',
                                 style: TextStyle(
                                   color: AppColors.primaryColor,
                                 ),

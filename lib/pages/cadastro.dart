@@ -77,7 +77,10 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   SizedBox(
                     width: 100,
                     height: 108,
-                    child: Image.asset('assets/logo.png'),
+                    child: Image.asset(
+                      'assets/logo.png',
+                      semanticLabel: 'Logo MobiRural',
+                    ),
                   ),
                   const Text(
                     'Cadastre-se',
@@ -90,6 +93,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   TextFormField(
                     controller: _nameController,
                     decoration: const InputDecoration(
+                      hintText: 'Digite seu primeiro nome',
                       labelText: 'Nome',
                       labelStyle: TextStyle(color: Colors.grey),
                       focusedBorder: UnderlineInputBorder(
@@ -109,6 +113,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
+                      hintText: 'Digite seu email',
                       labelText: 'Email',
                       labelStyle: TextStyle(color: Colors.grey),
                       focusedBorder: UnderlineInputBorder(
@@ -129,6 +134,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     controller: _passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(
+                      hintText: 'Digite sua senha',
                       labelText: 'Senha',
                       labelStyle: TextStyle(color: Colors.grey),
                       focusedBorder: UnderlineInputBorder(
@@ -153,6 +159,7 @@ class _CadastroScreenState extends State<CadastroScreen> {
                     controller: _passController,
                     obscureText: true,
                     decoration: const InputDecoration(
+                      hintText: 'Confirme sua senha',
                       labelText: 'Confirmar Senha',
                       labelStyle: TextStyle(color: Colors.grey),
                       focusedBorder: UnderlineInputBorder(

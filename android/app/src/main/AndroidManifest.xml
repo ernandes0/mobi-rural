@@ -5,10 +5,16 @@
 
     <uses-feature android:name="android.hardware.location.gps" />
     <uses-feature android:name="android.hardware.location.network" />
+    
     <application
         android:label="mobirural"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+          android:name="com.google.android.geo.API_KEY"
+          android:value="CHAVE_API"/>
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
