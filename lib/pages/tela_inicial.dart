@@ -141,10 +141,9 @@ class _InicialScreenState extends State<InicialScreen> {
 
     // Widget botão flutuante
     Widget botaoFlutuante = Positioned(
-      bottom: 100,
-      right: 100,
+      bottom: 85.0,
+      right: 16.0,
       child: FloatingActionButton(
-        shape: const CircleBorder(),
         onPressed: () {
           Navigator.push(
             context,
@@ -153,8 +152,8 @@ class _InicialScreenState extends State<InicialScreen> {
             ),
           );
         },
-        backgroundColor: AppColors.primaryColor,
-        child: const Icon(Icons.add),
+        backgroundColor: AppColors.accentColor,
+        child: const Icon(Icons.add, size: 40.0, color: Colors.deepOrange,),
       ),
     );
 
@@ -169,11 +168,7 @@ class _InicialScreenState extends State<InicialScreen> {
               colunadupla,
             ],
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height / 10,
-            left: MediaQuery.of(context).size.width / 1.2,
-            child: botaoFlutuante,
-          ),
+          botaoFlutuante,
         ],
       ),
     );
