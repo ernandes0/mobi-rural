@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobirural/pages/addobstaculos.dart';
 import 'package:mobirural/services/map_service.dart';
+import 'package:mobirural/services/user_current_local.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -19,13 +21,25 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   void initState() {
     super.initState();
+    _requestLocationPermission();
     _loadMarkers();
   }
 
+  Future<void> _requestLocationPermission() async {
+    Position? location = await getCurrentLocation();
+    if (location != null) {
+      setState(() {
+        userLocation = LatLng(location.latitude, location.longitude);
+      });
+    }
+  }
+
   Future<void> _loadMarkers() async {
-    Set<Marker> markers = await MapService().getBuildingMarkers();
+    Set<Marker> buildingMarkers = await MapService().getBuildingMarkers();
+    Set<Marker> obstacleMarkers = await MapService().getObstacleMarkers();
     setState(() {
-      _markers = markers;
+      _markers.addAll(buildingMarkers);
+      _markers.addAll(obstacleMarkers);
     });
   }
 

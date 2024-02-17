@@ -73,6 +73,7 @@ flutter:
     - assets/logo.png
     - assets/cam_icon.png
     - assets/building.png
+    - assets/obstacle.png
     - assets/maps/silver.json
   # To add assets to your application, add an assets section, like this:
 
