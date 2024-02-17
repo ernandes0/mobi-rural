@@ -34,22 +34,6 @@ class _EditPerfilState extends State<EditPerfil> {
       );
     }
 
-    // Widget editFormName(BuildContext context, UserModel userModel) {
-    //   _nameController = '${userModel.userData["name"]}';
-    //   return Forms(
-    //     inputLabelName: 'Nome',
-    //     inputText: _nameController,
-    //   );
-    // }
-
-    // Widget editFormEmail(BuildContext context, UserModel userModel) {
-    //   _emailController = '${userModel.userData["email"]}';
-    //   return Forms(
-    //     inputLabelName: 'Email',
-    //     inputText: _emailController,
-    //   );
-    // }
-
     Widget formBox = Consumer<UserModel>(
       builder: (context, userModel, child) {
         _nameController =
