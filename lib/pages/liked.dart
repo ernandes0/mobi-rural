@@ -40,19 +40,21 @@ class _LikedScreenState extends State<LikedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget appbar = AppBar(
-      backgroundColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      elevation: 0.0,
-      title: const Text(
-        'Favoritos',
-        style: TextStyle(
-          color: AppColors.primaryColor,
-          fontSize: 24.0,
-          fontWeight: FontWeight.bold,
-        ),
+    Widget appbar = const SizedBox(
+      height: 100,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Meus Favoritos",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textColor,
+            ),
+          )
+        ],
       ),
-      centerTitle: true,
     );
 
     Widget favoritos = Container(

@@ -13,6 +13,7 @@ class _AppBarEditState extends State<AppBarEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text(
           widget.titleName,

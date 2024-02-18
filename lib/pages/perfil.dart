@@ -91,7 +91,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     );
                   } else {
                     return const Text(
-                        'Usuário não logado'); // Se o usuário não estiver logado
+                        'Usuário não logado');
                   }
                 },
               ),
