@@ -30,6 +30,26 @@ class ObstacleModel {
     };
   }
 
+  ObstacleModel copyWith({
+    String? id,
+    String? userId,
+    String? userName,
+    GeoPoint? coordinates,
+    String? title,
+    String? details,
+    int? difficulty,
+  }) {
+    return ObstacleModel(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      userName: userName ?? this.userName,
+      coordinates: coordinates ?? this.coordinates,
+      title: title ?? this.title,
+      details: details ?? this.details,
+      difficulty: difficulty ?? this.difficulty,
+    );
+  }
+
   factory ObstacleModel.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     return ObstacleModel(

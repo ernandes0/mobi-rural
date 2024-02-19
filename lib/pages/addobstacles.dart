@@ -51,6 +51,7 @@ class _AddObstacleScreenState extends State<AddObstacleScreen> {
             ),
             TextField(
               controller: _detailsController,
+              maxLines: null,
               decoration: const InputDecoration(labelText: 'Detalhes'),
             ),
             DropdownButton<int>(
@@ -88,6 +89,7 @@ class _AddObstacleScreenState extends State<AddObstacleScreen> {
                     );
 
                     await ObstacleService().createObstacle(obstacle);
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context);
                   }
                 }

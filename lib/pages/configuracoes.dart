@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
+import 'package:mobirural/pages/usersinalizations.dart';
 
 class ConfiguracoesPage extends StatelessWidget {
   
@@ -23,7 +24,7 @@ class ConfiguracoesPage extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const ConfiguracoesPage()));
+                  builder: (context) => const UserObstaclesScreen()));
         },
       child: const Text('Configurações de acessibilidade'))
       );
