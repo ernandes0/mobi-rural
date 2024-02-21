@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/building_model.dart';
 import 'package:mobirural/models/user_model.dart';
-import 'package:mobirural/pages/navigation.dart';
+import 'package:mobirural/pages/routes.dart';
 import 'package:mobirural/services/accessibility_info.dart';
+import 'package:mobirural/services/directions.dart';
 import 'package:mobirural/services/distance_calculator.dart';
 import 'package:mobirural/services/favorite_service.dart';
+import 'package:mobirural/services/user_current_local.dart';
 import 'package:provider/provider.dart';
 
 class BuildingDetailsScreen extends StatefulWidget {
@@ -20,6 +24,7 @@ class BuildingDetailsScreen extends StatefulWidget {
 class _BuildingDetailsScreenState extends State<BuildingDetailsScreen> {
   late bool isFavorite = false;
   late String userId;
+  LatLng? destination;
 
   @override
   void initState() {
@@ -196,11 +201,26 @@ class _BuildingDetailsScreenState extends State<BuildingDetailsScreen> {
       child: SizedBox(
         width: double.infinity,
         child: ElevatedButton(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            Position? userLocation = await getCurrentLocation();
+            LatLng destination = LatLng(
+              building.coordinates?.latitude ?? 0.0,
+              building.coordinates?.longitude ?? 0.0,
+            );
+
+            RouteService routeService = RouteService();
+            if (userLocation != null) {
+              List<LatLng> routePoints =
+                  await routeService.getDirections(userLocation, destination);
+
+              // ignore: use_build_context_synchronously
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const NavigationScreen()));
+                  builder: (context) => RouteScreen(routePoints: routePoints),
+                ),
+              );
+            }
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(

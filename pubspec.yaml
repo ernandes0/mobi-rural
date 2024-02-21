@@ -46,6 +46,11 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   geolocator: ^10.1.0
   google_maps_flutter: ^2.5.3
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  flutter_polyline_points: ^1.0.0
+  http: ^0.13.6
+  dio: ^5.4.1
+  bezier: ^1.2.0
 
 dev_dependencies:
   flutter_test:

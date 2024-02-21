@@ -78,7 +78,11 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 );
               },
               backgroundColor: AppColors.accentColor,
-              child: const Icon(Icons.warning_rounded, size: 40.0, color: Colors.deepOrange,),
+              child: const Icon(
+                Icons.warning_rounded,
+                size: 40.0,
+                color: Colors.deepOrange,
+              ),
             ),
           ),
         ],
