@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/pages/configuracoes.dart';
+import 'package:mobirural/pages/perfil_edit.dart';
 import 'package:provider/provider.dart';
 
 class PerfilScreen extends StatefulWidget {
@@ -47,8 +48,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
           top: -4.0,
           child: GestureDetector(
             onTap: () {
-              // Adicione aqui a navegação para a tela de edição
-              // ou implemente a lógica desejada ao clicar em "Editar"
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const EditPerfil()));
             },
             child: const Text(
               'Editar',
@@ -90,7 +91,7 @@ class _PerfilScreenState extends State<PerfilScreen> {
                     );
                   } else {
                     return const Text(
-                        'Usuário não logado'); // Se o usuário não estiver logado
+                        'Usuário não logado');
                   }
                 },
               ),
@@ -104,8 +105,8 @@ class _PerfilScreenState extends State<PerfilScreen> {
       padding: const EdgeInsets.all(16.0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          onPrimary: Colors.black,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.0),
             side: const BorderSide(color: Colors.transparent),

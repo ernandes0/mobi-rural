@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobirural/config/firebase_options.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/services/building_service.dart';
+import 'package:mobirural/services/obstacle_service.dart';
 import 'package:mobirural/widgets/user_state.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => ObstacleService()),
         ChangeNotifierProvider(create: (context) => BuildingService()),
         ChangeNotifierProvider(create: (context) => UserModel()),
       ],

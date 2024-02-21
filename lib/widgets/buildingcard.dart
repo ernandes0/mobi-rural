@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobirural/models/building_model.dart';
+import 'package:mobirural/pages/buildingdetails.dart';
 
 class BuildingCard extends StatelessWidget {
   final Building building;
@@ -8,7 +9,16 @@ class BuildingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BuildingDetailsScreen(building: building),
+          ),
+        );
+      },
+    child: Card(
       semanticContainer: true,
       margin: const EdgeInsets.all(10),
       shape: RoundedRectangleBorder(
@@ -38,6 +48,6 @@ class BuildingCard extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }

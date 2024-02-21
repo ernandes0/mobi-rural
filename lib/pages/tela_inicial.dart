@@ -5,6 +5,7 @@ import 'package:mobirural/models/building_model.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/services/building_service.dart';
 import 'package:mobirural/widgets/buildingcard.dart';
+import 'package:mobirural/pages/cadastro_predio.dart';
 import 'package:provider/provider.dart';
 
 class InicialScreen extends StatefulWidget {
@@ -90,53 +91,84 @@ class _InicialScreenState extends State<InicialScreen> {
     final buildingService =
         Provider.of<BuildingService>(context, listen: false);
 
-    Widget colunadupla = FutureBuilder<List<Building>>(
-      future: buildingService.getBuildings(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: AppColors.primaryColor,
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return const Center(
-            child: Text('Erro ao carregar os dados dos prédios'),
-          );
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(
-            child: Text('Nenhum prédio encontrado'),
-          );
-        } else {
-          //snapshot.data contém a lista de prédios recuperados
-          List<Building> buildings = snapshot.data!;
+    Widget buildGrid(List<Building> buildings, BuildContext context) {
+      return SizedBox(
+        height: MediaQuery.of(context).size.height - 268,
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1 / 1.25,
+            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 4.0,
+          ),
+          itemCount: buildings.length,
+          itemBuilder: (context, index) {
+            return BuildingCard(building: buildings[index]);
+          },
+        ),
+      );
+    }
 
-          return SizedBox(
-            height: MediaQuery.of(context).size.height - 268,
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 1.25,
-                crossAxisSpacing: 4.0,
-                mainAxisSpacing: 4.0,
-              ),
-              itemCount: buildings.length,
-              itemBuilder: (context, index) {
-                return BuildingCard(building: buildings[index]);
-              },
+    Widget colunadupla = FutureBuilder<List<Building>>(
+        future: buildingService.getBuildings(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+            case ConnectionState.waiting:
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
+              );
+
+            case ConnectionState.done:
+              //snapshot.data contém a lista de prédios recuperados
+              List<Building> buildings = snapshot.data!;
+              return buildGrid(buildings, context);
+
+            default:
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text('Erro ao carregar os dados dos prédios'),
+                );
+              } else {
+                return const Center(
+                  child: Text('Nenhum prédio encontrado'),
+                );
+              }
+          }
+        });
+
+    // Widget botão flutuante
+    Widget botaoFlutuante = Positioned(
+      bottom: 85.0,
+      right: 16.0,
+      child: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CreateBuilding(),
             ),
           );
-        }
-      },
+        },
+        backgroundColor: AppColors.accentColor,
+        child: const Icon(Icons.add, size: 40.0, color: Colors.deepOrange,),
+      ),
     );
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      body: ListView(
+      body: Stack(
         children: [
-          barradebusca,
-          boasvindas,
-          colunadupla,
+          ListView(
+            children: [
+              barradebusca,
+              boasvindas,
+              colunadupla,
+            ],
+          ),
+          botaoFlutuante,
         ],
       ),
     );

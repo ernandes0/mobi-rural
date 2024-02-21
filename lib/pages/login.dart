@@ -17,6 +17,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
+  dynamic _isObscured;
+
+  @override
+  void initState() {
+    super.initState();
+    _isObscured = true;
+  }
+
   @override
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
@@ -38,7 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                           width: 100,
                           height: 108,
-                          child: Image.asset('assets/logo.png'),
+                          child: Image.asset(
+                            'assets/logo.png',
+                            semanticLabel: 'Logo MobiRural',
+                          ),
                         ),
                         const Text(
                           'MobiRural',
@@ -60,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextFormField(
                           controller: _emailController,
                           decoration: const InputDecoration(
+                            hintText: 'Email',
                             labelText: 'Email',
                             labelStyle: TextStyle(color: Colors.grey),
                             focusedBorder: UnderlineInputBorder(
@@ -78,16 +90,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 10.0),
                         TextFormField(
                           controller: _passController,
-                          decoration: const InputDecoration(
-                            labelText: 'Senha',
-                            labelStyle: TextStyle(color: Colors.grey),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: AppColors.primaryColor,
+                          decoration: InputDecoration(
+                              hintText: 'Senha',
+                              labelText: 'Senha',
+                              labelStyle: const TextStyle(color: Colors.grey),
+                              focusedBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: AppColors.primaryColor,
+                                ),
                               ),
-                            ),
-                          ),
-                          obscureText: true,
+                              suffixIcon: IconButton(
+                                padding:
+                                    const EdgeInsetsDirectional.only(end: 12.0),
+                                onPressed: () {
+                                  setState(() {
+                                    _isObscured = !_isObscured;
+                                  });
+                                },
+                                icon: _isObscured
+                                    ? const Icon(Icons.visibility)
+                                    : const Icon(Icons.visibility_off),
+                              )),
+                          obscureText: _isObscured,
                           validator: (value) {
                             if (value == null ||
                                 value.isEmpty ||
@@ -107,8 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               child: const Text(
                                 'Esqueci a senha',
-                                style:
-                                    TextStyle(color: AppColors.primaryColor),
+                                style: TextStyle(color: AppColors.primaryColor),
                               ),
                             ),
                           ],
@@ -145,6 +168,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             child: const Text(
                               'Entrar',
+                              semanticsLabel: 'Entrar no Aplicativo',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -172,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               child: const Text(
                                 'Crie um cadastro',
+                                semanticsLabel: 'Crie um cadastro',
                                 style: TextStyle(
                                   color: AppColors.primaryColor,
                                 ),
@@ -188,9 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _onSuccess() {
-
-  }
+  void _onSuccess() {}
 
   void _onFail() {
     ScaffoldMessenger.of(context).showSnackBar(
