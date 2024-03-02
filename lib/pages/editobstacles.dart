@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/models/obstacle_model.dart';
 import 'package:mobirural/services/obstacle_service.dart';
+import 'package:mobirural/widgets/appbar_edit.dart';
 import 'package:provider/provider.dart';
 
 class EditObstacleScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class EditObstacleScreen extends StatefulWidget {
 }
 
 class _EditObstacleScreenState extends State<EditObstacleScreen> {
+  final Widget _appbaredit = const AppBarEdit(titleName: 'Editar Sinalização');
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _detailsController = TextEditingController();
   int _difficulty = 0;
@@ -30,8 +33,9 @@ class _EditObstacleScreenState extends State<EditObstacleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Editar Obstáculo'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: _appbaredit,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -55,18 +59,46 @@ class _EditObstacleScreenState extends State<EditObstacleScreen> {
               min: 0,
               max: 5,
               divisions: 5,
+              inactiveColor: AppColors.backgroundColor,
+              activeColor: AppColors.primaryColor,
               onChanged: (value) {
                 setState(() {
                   _difficulty = value.round();
                 });
               },
             ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: () async {
-                await _saveChanges();
-              },
-              child: const Text('Salvar Alterações'),
+            const SizedBox(height: 20.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    await _saveChanges();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                      AppColors.primaryColor,
+                    ),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      const EdgeInsets.symmetric(vertical: 10.0),
+                    ),
+                  ),
+                  child: const Text(
+                    'Salvar Alterações',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

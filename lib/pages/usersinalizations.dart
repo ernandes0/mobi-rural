@@ -4,6 +4,7 @@ import 'package:mobirural/models/obstacle_model.dart';
 import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/pages/editobstacles.dart';
 import 'package:mobirural/services/obstacle_service.dart';
+import 'package:mobirural/widgets/appbar_edit.dart';
 import 'package:provider/provider.dart';
 
 class UserObstaclesScreen extends StatefulWidget {
@@ -14,13 +15,18 @@ class UserObstaclesScreen extends StatefulWidget {
 }
 
 class _UserObstaclesScreenState extends State<UserObstaclesScreen> {
+  final Widget _appbaredit = const AppBarEdit(titleName: 'Minhas Sinalizações');
+
   @override
   Widget build(BuildContext context) {
     final userModel = Provider.of<UserModel>(context);
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Minhas Sinalizações'),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60.0),
+        child: _appbaredit,
       ),
+
       body: FutureBuilder<List<ObstacleModel>>(
         future: Provider.of<ObstacleService>(context)
             .getUserObstacles(userModel.getId()!),
@@ -49,12 +55,12 @@ class _UserObstaclesScreenState extends State<UserObstaclesScreen> {
                 return Dismissible(
                   key: UniqueKey(),
                   background: Container(
-                    color: Colors.red,
+                    color: AppColors.accentColor,
                     alignment: Alignment.centerRight,
                     padding: const EdgeInsets.only(right: 16.0),
                     child: const Icon(
                       Icons.delete,
-                      color: Colors.white,
+                      color: AppColors.textColor,
                     ),
                   ),
                   onDismissed: (direction) {
@@ -65,8 +71,8 @@ class _UserObstaclesScreenState extends State<UserObstaclesScreen> {
                     subtitle: Text(obstacle.details ?? ''),
                     trailing: Text('Dificuldade: ${obstacle.difficulty}'),
                     onTap: () {
-                    _navigateToEditScreen(context, obstacle);
-                  },
+                      _navigateToEditScreen(context, obstacle);
+                    },
                   ),
                 );
               },
@@ -76,7 +82,7 @@ class _UserObstaclesScreenState extends State<UserObstaclesScreen> {
       ),
     );
   }
-  
+
   void _navigateToEditScreen(BuildContext context, ObstacleModel obstacle) {
     Navigator.push(
       context,
@@ -118,5 +124,4 @@ class _UserObstaclesScreenState extends State<UserObstaclesScreen> {
           .deleteObstacle(obstacle.id!);
     }
   }
-  
 }

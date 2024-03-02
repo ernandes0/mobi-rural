@@ -51,7 +51,8 @@ class _BuildingDetailsScreenState extends State<BuildingDetailsScreen> {
       await FavoriteService()
           .removeFavoriteBuilding(userId!, widget.building.id!);
     } else {
-      await FavoriteService().addFavoriteBuilding(userId!, widget.building.id!);
+      await FavoriteService()
+          .addFavoriteBuilding(userId!, widget.building);
     }
     setState(() {
       isFavorite = !isFavorite;
