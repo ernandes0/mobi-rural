@@ -1,37 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mobirural/constants/appconstants.dart';
+import 'package:mobirural/models/user_model.dart';
 import 'package:mobirural/models/obstacle_model.dart';
 import 'package:mobirural/services/obstacle_service.dart';
+import 'package:mobirural/utils/user_current_local.dart';
 import 'package:mobirural/widgets/appbar_edit.dart';
 import 'package:provider/provider.dart';
 
-class EditObstacleScreen extends StatefulWidget {
-  final ObstacleModel obstacle;
-
-  const EditObstacleScreen({super.key, required this.obstacle});
+class AddObstacleScreen extends StatefulWidget {
+  const AddObstacleScreen({super.key});
 
   @override
-  State<EditObstacleScreen> createState() => _EditObstacleScreenState();
+  State<AddObstacleScreen> createState() => _AddObstacleScreenState();
 }
 
-class _EditObstacleScreenState extends State<EditObstacleScreen> {
-  final Widget _appbaredit = const AppBarEdit(titleName: 'Editar Sinalização');
+class _AddObstacleScreenState extends State<AddObstacleScreen> {
+  final Widget _appbaredit =
+      const AppBarEdit(titleName: 'Adicionar Sinalização');
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _detailsController = TextEditingController();
-  int _difficulty = 0;
+  int? _difficulty;
+  Position? _userLocation;
 
   @override
   void initState() {
     super.initState();
+    _getUserLocation();
+  }
 
-    // Preencher os controladores com os dados atuais do obstáculo
-    _titleController.text = widget.obstacle.title ?? '';
-    _detailsController.text = widget.obstacle.details ?? '';
-    _difficulty = widget.obstacle.difficulty ?? 0;
+  Future<void> _getUserLocation() async {
+    Position? position = await getCurrentLocation();
+    setState(() {
+      _userLocation = position;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final userModel = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60.0),
@@ -46,35 +54,60 @@ class _EditObstacleScreenState extends State<EditObstacleScreen> {
               controller: _titleController,
               decoration: const InputDecoration(labelText: 'Título'),
             ),
-            const SizedBox(height: 16.0),
             TextField(
               controller: _detailsController,
               maxLines: null,
               decoration: const InputDecoration(labelText: 'Detalhes'),
             ),
-            const SizedBox(height: 16.0),
-            Text('Dificuldade: $_difficulty'),
-            Slider(
-              value: _difficulty.toDouble(),
-              min: 0,
-              max: 5,
-              divisions: 5,
-              inactiveColor: AppColors.backgroundColor,
-              activeColor: AppColors.primaryColor,
+            DropdownButton<int>(
+              value: _difficulty,
               onChanged: (value) {
                 setState(() {
-                  _difficulty = value.round();
+                  _difficulty = value;
                 });
               },
+              items: List.generate(
+                6,
+                (index) => DropdownMenuItem<int>(
+                  value: index,
+                  child: Text('Dificuldade: $index'),
+                ),
+              ),
             ),
-            const SizedBox(height: 20.0),
+
+            const SizedBox(height: 20),
+
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await _saveChanges();
+                    if (_userLocation != null) {
+                      String? userId = userModel.getId();
+                      String userName = userModel.userData['name'];
+                      String title = _titleController.text;
+                      String details = _detailsController.text;
+
+                      if (userId != null &&
+                          title.isNotEmpty &&
+                          details.isNotEmpty &&
+                          _difficulty != null) {
+                        ObstacleModel obstacle = ObstacleModel(
+                          userId: userId,
+                          userName: userName,
+                          coordinates: GeoPoint(_userLocation!.latitude,
+                              _userLocation!.longitude),
+                          title: title,
+                          details: details,
+                          difficulty: _difficulty!,
+                        );
+
+                        await ObstacleService().createObstacle(obstacle);
+                        // ignore: use_build_context_synchronously
+                        Navigator.pop(context);
+                      }
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(
@@ -90,7 +123,7 @@ class _EditObstacleScreenState extends State<EditObstacleScreen> {
                     ),
                   ),
                   child: const Text(
-                    'Salvar Alterações',
+                    'Salvar Sinalização',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -104,19 +137,5 @@ class _EditObstacleScreenState extends State<EditObstacleScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _saveChanges() async {
-    final updatedObstacle = widget.obstacle.copyWith(
-      title: _titleController.text,
-      details: _detailsController.text,
-      difficulty: _difficulty,
-    );
-
-    await Provider.of<ObstacleService>(context, listen: false)
-        .updateObstacle(updatedObstacle);
-
-    // ignore: use_build_context_synchronously
-    Navigator.pop(context);
   }
 }

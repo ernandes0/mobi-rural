@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobirural/constants/appconstants.dart';
 import 'package:mobirural/services/map_service.dart';
-import 'package:mobirural/services/user_current_local.dart';
+import 'package:mobirural/utils/user_current_local.dart';
 import 'package:mobirural/widgets/appbar_edit.dart';
 
 class RouteScreen extends StatefulWidget {
